@@ -1,42 +1,42 @@
 # Quiet Arcana
 
-Quiet Arcana is a Chinese-language, local-first tarot reading web app. It runs as a static site with no build step, account, backend, or AI service. Readings are for reflection, not certain prediction.
+Quiet Arcana 是一款以中文呈现、以本地使用为优先的塔罗牌解读网页应用。它是静态网站，无需构建、账户、后端或 AI 服务。解读旨在帮助自我反思，而非作出确定的预言。
 
-## Features
+## 功能
 
-- Built-in one-, three-, and five-card readings, a Relationship spread, and the Celtic Cross.
-- A visual custom spread builder for 1–15 positions, including spatial layouts.
-- A cryptographically randomized shuffle and independently assigned upright or reversed orientation.
-- Local reference meanings for all 78 cards.
-- Optional, explicitly saved reading History and Reality Comparisons for recording later events alongside frozen reading snapshots.
-- Local JSON Backup & Restore for saved custom spreads, History, and Reality Comparisons.
+- 内置单张、三张、五张牌阵、关系牌阵和凯尔特十字牌阵。
+- 可视化自定义牌阵编辑器，支持设置 1–15 个牌位及其空间布局。
+- 使用密码学安全随机数洗牌，并独立决定每张牌的正位或逆位。
+- 内置全部 78 张牌的本地参考牌义。
+- 可选择明确保存解读历史和「现实对照」，将后续事件与保存时的解读快照一起记录。
+- 可通过本地 JSON 备份与恢复已保存的自定义牌阵、解读历史和现实对照。
 
-## Run locally
+## 本地运行
 
-Serve this directory with any static HTTP server, then open its local URL in a modern browser. For example, if Python 3 is installed:
+使用任意静态 HTTP 服务器提供此目录，然后在现代浏览器中打开本地网址。例如，已安装 Python 3 时可运行：
 
 ```sh
-python3 -m http.server 8000
+python -m http.server 8000
 ```
 
-Visit `http://127.0.0.1:8000/`. The app needs no package installation, build system, or server-side code. Use an HTTP server rather than opening `index.html` as a `file://` page.
+访问 `http://127.0.0.1:8000/`。无需安装项目依赖、运行构建流程或部署服务端代码。请使用 HTTP 服务器，不要直接以 `file://` 方式打开 `index.html`。
 
-## Privacy and data portability
+## 隐私与数据迁移
 
-Tarot questions are processed in the browser. Quiet Arcana has no account, backend, API calls, analytics, or tracking. Saving a reading is optional; saved readings, comparisons, and custom spreads remain in that browser's `localStorage`. They do not automatically sync between browsers or devices.
+塔罗问题在浏览器中处理。Quiet Arcana 没有账户、后端、API 调用、分析工具或追踪功能。保存解读是可选的；已保存的解读、现实对照和自定义牌阵留在该浏览器的 `localStorage` 中，不会自动在浏览器或设备之间同步。
 
-Use **数据管理 → 导出本地备份** to download a JSON copy of saved data. **恢复备份** validates a selected backup and replaces the three saved collections after confirmation; it does not merge them. Keep your own backup before clearing browser data or changing devices. An unsaved reading is not included in a backup.
+通过「数据管理 → 导出本地备份」可下载已保存数据的 JSON 副本。「恢复备份」会验证所选备份，并在确认后替换上述三类已保存数据，而不是合并。清除浏览器数据或更换设备之前，请自行保存备份。未保存的解读不会包含在备份中。
 
-If GitHub Pages is enabled later, it will serve the same static files; it will not store your questions or readings.
+GitHub Pages 仅提供相同的静态文件，不会存储你的问题或解读。
 
-## Randomness
+## 随机性
 
-The app uses `crypto.getRandomValues()` with rejection sampling to avoid modulo bias. A Fisher–Yates shuffle creates a locked deck for each reading, and each card's upright/reversed orientation is generated independently. Choosing a card back reveals the corresponding card from that already shuffled deck.
+应用使用 `crypto.getRandomValues()`，并通过拒绝采样避免取模偏差。每次解读都使用 Fisher–Yates 算法生成并锁定一副洗好的牌；每张牌的正位或逆位独立生成。选择牌背时，显示的是这副已洗好牌中对应的牌。
 
-## Artwork
+## 牌面图片
 
-Rider–Waite–Smith artwork by Pamela Colman Smith (1910). Images sourced from Wikimedia Commons. The original artwork is public domain; Quiet Arcana does not claim to have created or own it.
+Rider–Waite–Smith 牌面由 Pamela Colman Smith 于 1910 年创作，图片来源于 Wikimedia Commons。原始牌面作品属于公有领域；Quiet Arcana 不声称创作或拥有这些作品。
 
-## Status
+## 项目状态
 
-Quiet Arcana is a static, local-first project preparing for its first repository publication. GitHub Pages hosting and offline PWA support are not configured yet.
+Quiet Arcana 是一个以本地使用为优先的静态项目，现已发布在 GitHub Pages：<https://takeurtimeandmine.github.io/quiet-arcana/>。PWA 和离线安装支持尚未配置。
