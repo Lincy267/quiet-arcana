@@ -223,6 +223,7 @@ h2 { margin-bottom: 12px; font: 400 clamp(2rem, 5vw, 3.6rem)/1.02 var(--serif); 
 .revealed-face { position: relative; display: flex; aspect-ratio: 2 / 3.25; align-items: center; justify-content: center; overflow: hidden; border: 1px solid #d2b772; color: var(--ivory); background: #d3bd83; box-shadow: 0 12px 26px rgba(0,0,0,.35); transition: border-color .18s ease, box-shadow .18s ease; }
 .revealed-face::after { content: ""; position: absolute; inset: 8px; border: 1px solid rgba(65,45,29,.42); }
 .tarot-art { display: block; width: 100%; height: 100%; object-fit: contain; transition: transform .55s cubic-bezier(.2,.75,.2,1); }
+.tarot-art-fallback { padding: 14px; color: #332716; font: 600 .8rem/1.4 var(--serif); text-align: center; }
 .revealed-face.reversed .tarot-art { transform: rotate(180deg); }
 .card-details { padding-top: 10px; }
 .card-copy { display: flex; min-width: 0; align-items: baseline; gap: 6px; }
@@ -239,6 +240,8 @@ h2 { margin-bottom: 12px; font: 400 clamp(2rem, 5vw, 3.6rem)/1.02 var(--serif); 
 .card-meaning-keywords { color: var(--gold-light); font-family: var(--serif); }
 .card-meaning-summary { display: -webkit-box; height: 2.9em; overflow: hidden; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
 .inline-meaning-always:not([data-card-count="1"]) .card-meaning-keywords, .inline-meaning-wide .card-meaning-keywords { display: -webkit-box; height: 2.9em; overflow: hidden; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
+.revealed-spread:is([data-spread-id="single"], [data-spread-id="pastPresentFuture"], [data-spread-id="situationChallengeAdvice"]) .card-meaning-keywords,
+.revealed-spread:is([data-spread-id="single"], [data-spread-id="pastPresentFuture"], [data-spread-id="situationChallengeAdvice"]) .card-meaning-summary { display: block; height: auto; overflow: visible; -webkit-line-clamp: unset; }
 .meaning-hint { display: none; margin-top: 7px; color: #847c72; font-size: .58rem; letter-spacing: .08em; text-align: right; }
 
 .meaning-backdrop { position: fixed; z-index: 24; inset: 0; background: rgba(4,3,6,.68); backdrop-filter: blur(2px); }
@@ -548,7 +551,9 @@ h2 { margin-bottom: 12px; font: 400 clamp(2rem, 5vw, 3.6rem)/1.02 var(--serif); 
 .deck-grid { display: grid; min-height: 0; grid-template-columns: repeat(14, minmax(0, 1fr)); gap: 8px; perspective: 900px; }
 .deck-card { min-width: 0; padding: 0; aspect-ratio: 2 / 3; border: 0; background: transparent; cursor: pointer; perspective: 500px; }
 .deck-card-inner { position: relative; display: block; width: 100%; height: 100%; transform-style: preserve-3d; transition: transform .6s cubic-bezier(.2,.75,.2,1); }
-.deck-card:hover:not(:disabled) .deck-card-inner { transform: translateY(-7px) rotateZ(-1deg); }
+@media (hover: hover) and (pointer: fine) {
+  .deck-card:hover:not(:disabled) .deck-card-inner { transform: translateY(-7px) rotateZ(-1deg); }
+}
 .deck-card:focus-visible { outline: 2px solid var(--gold-light); outline-offset: 3px; }
 .deck-card.is-picked .deck-card-inner { transform: rotateY(180deg); }
 .card-back, .card-picked { position: absolute; inset: 0; display: flex; align-items: center; justify-content: space-around; border: 1px solid #8d744b; backface-visibility: hidden; }
@@ -667,6 +672,8 @@ code { color: var(--gold-light); font-size: .9em; }
   .revealed-spread { scroll-margin-top: 74px; }
   .card-meaning-preview { font-size: .67rem; line-height: 1.4; }
   .card-meaning-summary, .inline-meaning-always:not([data-card-count="1"]) .card-meaning-keywords, .inline-meaning-wide .card-meaning-keywords { height: 2.8em; }
+  .revealed-spread:is([data-spread-id="single"], [data-spread-id="pastPresentFuture"], [data-spread-id="situationChallengeAdvice"]) .card-meaning-keywords { height: auto; }
+  .revealed-spread:is([data-spread-id="pastPresentFuture"], [data-spread-id="situationChallengeAdvice"]) .card-copy h3 { min-height: 2.4em; }
   .meaning-hint { text-align: left; }
   .meaning-panel { top: auto !important; right: 0; bottom: 0; left: 0 !important; width: 100%; max-height: min(72vh, 520px); padding: 22px 22px calc(24px + env(safe-area-inset-bottom)); border-width: 1px 0 0; border-radius: 16px 16px 0 0; animation: meaning-sheet-in .24s ease both; }
   @keyframes meaning-sheet-in { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
@@ -680,6 +687,10 @@ code { color: var(--gold-light); font-size: .9em; }
 }
 
 @media (max-width: 360px) {
+  .revealed-spread:is([data-spread-id="pastPresentFuture"], [data-spread-id="situationChallengeAdvice"]) .card-copy { display: block; }
+  .revealed-spread:is([data-spread-id="pastPresentFuture"], [data-spread-id="situationChallengeAdvice"]) .card-copy small { display: block; margin-bottom: 2px; }
+  .revealed-spread:is([data-spread-id="pastPresentFuture"], [data-spread-id="situationChallengeAdvice"]) .card-copy small::after { display: none; }
+  .revealed-spread:is([data-spread-id="pastPresentFuture"], [data-spread-id="situationChallengeAdvice"]) .card-copy h3 { max-width: 3.5em; }
   .deck-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); }
   .editor-slot { width: 34px; height: 56px; }
   .editor-slot.is-horizontal { width: 56px; height: 34px; }

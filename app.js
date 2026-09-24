@@ -1374,14 +1374,15 @@
     });
   }
 
-  function makeInlineMeaning(card) {
+  function makeInlineMeaning(card, spread) {
     var record = meaningsByName.get(card.name);
     var selectedMeaning = record[card.orientation === "upright" ? "upright" : "reversed"];
     var preview = document.createElement("div");
     preview.className = "card-meaning-preview";
     var keywords = document.createElement("p");
     keywords.className = "card-meaning-keywords";
-    keywords.textContent = selectedMeaning.keywords.slice(0, 3).join(" · ");
+    var fullMeaning = spread.type === "builtin" && (spread.cardCount === 1 || spread.cardCount === 3);
+    keywords.textContent = (fullMeaning ? selectedMeaning.keywords : selectedMeaning.keywords.slice(0, 3)).join(" · ");
     var summary = document.createElement("p");
     summary.className = "card-meaning-summary";
     summary.textContent = selectedMeaning.summary;
@@ -1406,8 +1407,22 @@
     var sourceCard = window.TAROT_CARDS.find(function (entry) { return entry.name === card.name; });
     var image = document.createElement("img");
     image.className = "tarot-art";
-    image.src = sourceCard.image;
     image.alt = card.name + " 塔罗牌图像";
+    var imageFallback = document.createElement("span");
+    imageFallback.className = "tarot-art-fallback";
+    imageFallback.textContent = card.name + " · 图像暂不可用";
+    imageFallback.hidden = true;
+    var imageRetried = false;
+    image.addEventListener("error", function () {
+      if (imageRetried) {
+        image.hidden = true;
+        imageFallback.hidden = false;
+        return;
+      }
+      imageRetried = true;
+      image.src = sourceCard.image + "?retry=" + Date.now();
+    });
+    image.src = sourceCard.image;
     var details = document.createElement("div");
     details.className = "card-details";
     var copy = document.createElement("div");
@@ -1417,7 +1432,7 @@
     var title = document.createElement("h3");
     title.textContent = card.name;
     copy.append(arcana, title);
-    face.appendChild(image);
+    face.append(image, imageFallback);
     var caption = document.createElement("footer");
     var positionLabel = document.createElement("span");
     positionLabel.textContent = position.label;
@@ -1427,7 +1442,7 @@
     details.append(copy, caption);
     var inlineMeaningMode = historyOnly ? "none" : getInlineMeaningMode(spread);
     if (inlineMeaningMode !== "none") {
-      details.appendChild(makeInlineMeaning(card));
+      details.appendChild(makeInlineMeaning(card, spread));
       if (inlineMeaningMode === "wide") {
         var hint = document.createElement("small");
         hint.className = "meaning-hint";
