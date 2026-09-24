@@ -2336,6 +2336,8 @@
   function exportLocalBackup(targetStatus) {
     var status = targetStatus || dataManagementStatus;
     try {
+      if (!state.savedSpreadsWritable) throw new Error("当前自定义牌阵存储格式异常，无法安全导出。");
+      if (!state.historyWritable) throw new Error("当前历史记录存储格式异常，无法安全导出。");
       downloadBackup(currentBackupEnvelope(), "quiet-arcana-backup");
       backupStatus(status, "备份已导出 ✓", false);
       return true;
