@@ -548,7 +548,7 @@
   }
 
   function syncPageScrollLock() {
-    if (document.querySelector("dialog[open]")) {
+    if (document.querySelector("dialog[open]") || (!meaningPanel.hidden && usesMeaningSheet())) {
       lockPageScroll();
       return;
     }
@@ -1300,6 +1300,7 @@
     var trigger = state.meaningTrigger;
     meaningPanel.hidden = true;
     meaningBackdrop.hidden = true;
+    syncPageScrollLock();
     meaningPanel.style.removeProperty("left");
     meaningPanel.style.removeProperty("top");
     if (trigger) trigger.setAttribute("aria-expanded", "false");
@@ -1326,6 +1327,7 @@
     meaningPanel.setAttribute("aria-label", card.name + orientationLabel + "基础牌义");
     meaningPanel.hidden = false;
     meaningBackdrop.hidden = !usesMeaningSheet();
+    syncPageScrollLock();
     positionMeaningPanel(trigger);
     closeMeaningButton.focus({ preventScroll: true });
   }
@@ -2472,6 +2474,7 @@
     showComparisonStatus("quickComparisonStatus", "");
     renderQuickComparisonList();
     openDialog(quickComparisonDialog);
+    document.getElementById("closeQuickComparison").focus({ preventScroll: true });
   }
 
   function quickAddToComparison(comparisonId) {
@@ -3410,6 +3413,7 @@
     updateCardMeaningInteractions();
     if (meaningPanel.hidden || !state.meaningTrigger) return;
     meaningBackdrop.hidden = !usesMeaningSheet();
+    syncPageScrollLock();
     positionMeaningPanel(state.meaningTrigger);
   });
   window.addEventListener("scroll", function () { updateCompactSelectionGuide(); }, { passive: true });
